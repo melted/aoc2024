@@ -48,4 +48,4 @@ int Solve2(List<(int, int)> input)
         return count * i;
     }).Sum();
     return result;
-}
+} 
