@@ -5,6 +5,11 @@ var data = File.ReadAllText("D:/niklas/repos/aoc2024/data/input3.txt");
 var testData = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))";
 var testData2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
 
+Console.WriteLine(Solve1(testData));
+Console.WriteLine(Solve1(data));
+Console.WriteLine(Solve2(testData2));
+Console.WriteLine(Solve2(data));
+
 long Solve1(string data)
 {
     var insts = ParseData(data);
@@ -33,11 +38,6 @@ long Solve2(string data)
     }
     return sum;
 }
-
-Console.WriteLine(Solve1(testData));
-Console.WriteLine(Solve1(data));
-Console.WriteLine(Solve2(testData2));
-Console.WriteLine(Solve2(data));
 
 List<Inst> ParseData(string text)
 {
