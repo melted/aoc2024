@@ -23,8 +23,6 @@ Equation ParseLine(string line)
     return new Equation(parts, total);
 }
 
-var eq = new Equation([6, 8, 6, 15], 7290);
-var s = eq.Eval([Operator.Multiply, Operator.Concat, Operator.Multiply]);
 Console.WriteLine(Solve1(testData, false));
 Console.WriteLine(Solve1(lines, false));
 Console.WriteLine(Solve1(testData, true));
@@ -32,82 +30,36 @@ Console.WriteLine(Solve1(lines, true));
 
 long Solve1(string[] data, bool concat)
 {
-    return data.Select(ParseLine).Where(eq => IsCorrect(eq, concat)).Select(eq => eq.Total).Sum();
-}
-
-bool IsCorrect(Equation eq, bool concat)
-{
-    foreach (var ops in AllCombinations(eq.Parts.Count - 1, concat))
-    {
-        if (eq.Eval(ops) == eq.Total)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-List<List<Operator>> AllCombinations(int len, bool concat)
-{
-    if (len == 0)
-    {
-        return [[]];
-    } 
-    else
-    {
-        var heads = AllCombinations(len - 1, concat);
-        List<List<Operator>> result = [];
-        foreach (var head in heads)
-        {
-            List<Operator> add = new(head);
-            add.Add(Operator.Add);            
-            result.Add(add);
-            List<Operator> mul = new(head);
-            mul.Add(Operator.Multiply);            
-            result.Add(mul);
-            if (concat)
-            {
-                List<Operator> cc = new(head);
-                cc.Add(Operator.Concat);
-                result.Add(cc);
-            }
-        }
-        return result;
-    }    
-}
-
-
-
-enum Operator
-{
-    Add,
-    Multiply,
-    Concat
+    return data.Select(ParseLine).Where(eq => eq.Eval(concat)).Select(eq => eq.Total).Sum();
 }
 
 record Equation(List<long> Parts, long Total)
 {
-    public long Eval(List<Operator> ops)
+    public bool Eval(bool concat)
     {
-        long result = Parts[0];
+        List<long> results = [Parts[0]];
         int i = 0;
         while (i < Parts.Count - 1)
         {
-            var op = ops[i];
             var rhs = Parts[i+1];
-            result = op switch
-            {
-                Operator.Add => result + rhs,
-                Operator.Multiply => result * rhs,
-                Operator.Concat => result * Magnitude(rhs) + rhs,
-                _ => throw new ArgumentException()
-            };
+            results = results.SelectMany(r => GetOps(r, rhs, concat))
+                .Where(r => r <= Total).ToList();
             i++;
+        }
+        return results.Any(n => n == Total);
+    }
+    
+    static List<long> GetOps(long lhs, long rhs, bool concat)
+    {
+        var result = new List<long> { lhs + rhs, lhs * rhs }; 
+        if (concat)
+        {
+            result.Add(lhs * Magnitude(rhs) + rhs);
         }
         return result;
     }
     
-    public static long Magnitude(long num)
+    static long Magnitude(long num)
     {
         var result = 10;
         while (result < num) result *= 10;
