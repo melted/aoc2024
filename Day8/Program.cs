@@ -39,6 +39,7 @@ Console.WriteLine(CountAntinodes(ParseMap(testData), false));
 Console.WriteLine(CountAntinodes(ParseMap(data), false));
 Console.WriteLine(CountAntinodes(ParseMap(testData), true));
 Console.WriteLine(CountAntinodes(ParseMap(data), true));
+
 int CountAntinodes(Map map, bool harmonics)
 {
     ImmutableHashSet<(int, int)> antinodes = ImmutableHashSet<(int, int)>.Empty;
@@ -73,7 +74,7 @@ ImmutableHashSet<(int, int)> Antinodes(Map map, ImmutableHashSet<(int, int)> nod
                     antinodes = antinodes.Add(p);
                     p = (p.Item1 + dx, p.Item2 + dy);
                 }
-                p = pick;
+                p = (pick.Item1 - dx, pick.Item2 - dy);;
                 while (map.Inbounds(p))
                 {
                     antinodes = antinodes.Add(p);
