@@ -143,4 +143,4 @@ record Map(Dictionary<(int x, int y), char> points)
 
         return result;
     }
-}                    
+}
