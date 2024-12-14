@@ -70,13 +70,12 @@ List<Entry> ParseData(string[] data)
     return result;
 }
 
-
 record Entry((long x, long y) ButtonA, (long x, long y) ButtonB, (long x, long y) Prize)
 {
     public bool Solve(out (long, long) solution)
     {
         // We have two unknowns and two equations, eliminate ButtonB by multiplying each
-        // equation by the number of buttonBs in the other and subtract them.
+        // equation by the move of buttonBs in the other and subtract them.
         long lhs = ButtonA.x * ButtonB.y - ButtonA.y * ButtonB.x;
         long rhs = Prize.x * ButtonB.y - Prize.y * ButtonB.x;
         if (lhs != 0 && rhs % lhs == 0)
