@@ -17,7 +17,6 @@ Console.WriteLine(Solve1(startState));
 Console.WriteLine(FindCopy(testState5));
 Console.WriteLine(FindCopy(startState));
 
-
 State Run(State start)
 {
     State state = start;
