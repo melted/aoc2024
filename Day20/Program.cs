@@ -1,41 +1,59 @@
 ﻿using System.Collections.Immutable;
 
-string[] data = File.ReadAllLines("/home/niklas/repos/aoc2024/data/input20.txt");
+string[] data = File.ReadAllLines("D:/Niklas/repos/aoc2024/data/input20.txt");
 
 string[] testData = """
-                    ###############
-                    #...#...#.....#
-                    #.#.#.#.#.###.#
-                    #S#...#.#.#...#
-                    #######.#.#.###
-                    #######.#.#...#
-                    #######.#.###.#
-                    ###..E#...#...#
-                    ###.#######.###
-                    #...###...#...#
-                    #.#####.#.###.#
-                    #.#...#.#.#...#
-                    #.#.#.#.#.#.###
-                    #...#...#...###
-                    ###############
-                    """.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+    ###############
+    #...#...#.....#
+    #.#.#.#.#.###.#
+    #S#...#.#.#...#
+    #######.#.#.###
+    #######.#.#...#
+    #######.#.###.#
+    ###..E#...#...#
+    ###.#######.###
+    #...###...#...#
+    #.#####.#.###.#
+    #.#...#.#.#...#
+    #.#.#.#.#.#.###
+    #...#...#...###
+    ###############
+    """.Split("\n", StringSplitOptions.RemoveEmptyEntries);
 
-Console.WriteLine(Solve(data, 99));
+Console.WriteLine(Solve(testData, 2, 15));
+Console.WriteLine(Solve(data, 2, 100));
+Console.WriteLine(Solve(testData, 20, 73));
+Console.WriteLine(Solve(data, 20, 100));
 
-int Solve(string[] data, int num)
+List<(int, int)> GetTargets(int range)
+{
+    List<(int, int)> result = [];
+    for (int y = -range; y < range + 1; y++)
+    {
+        int xr = range - Math.Abs(y);
+        for (int x = -xr; x < xr + 1; x++)
+        {
+            result.Add((x, y));
+        }
+    }
+    return result;
+}
+
+int Solve(string[] data, int range, int num)
 {
     var map = ParseMap(data);
     var route = GetRoute(map);
     int count = 0;
-    List<(int x, int y)> neighbors = [(2, 0), (0, 2), (-2, 0), (0, -2)];
+    List<(int x, int y)> neighbors = GetTargets(range);
     foreach (var kv in route)
     {
         var x = kv.Key;
         foreach (var p in neighbors)
         {
+            var distance = Math.Abs(p.x) + Math.Abs(p.y);
             if (route.TryGetValue((x.Item1 + p.x, x.Item2 + p.y), out var c))
             {
-                if (c-kv.Value > num + 2) count++;
+                if (c-kv.Value >= num + distance) count++;
             }
         }
     } 
