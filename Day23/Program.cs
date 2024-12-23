@@ -1,8 +1,4 @@
-﻿using System.Drawing;
-using System.Net.Http.Headers;
-using System.Net.WebSockets;
-
-var data = File.ReadAllLines("/home/niklas/repos/aoc2024/data/input23.txt");
+﻿var data = File.ReadAllLines("/home/niklas/repos/aoc2024/data/input23.txt");
 
 var testData =  """
                 kh-tc
